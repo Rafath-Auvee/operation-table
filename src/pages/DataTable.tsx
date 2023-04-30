@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
+import axios from "axios";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 70 },
@@ -19,23 +20,11 @@ const columns: GridColDef[] = [
   },
 ];
 
-export default function DataTable() {
-  const [rows, setRows] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch("/api/products");
-      const data = await response.json();
-      setRows(data);
-    };
-
-    fetchData();
-  }, []);
-
+export default function DataTable({ products }) {
   return (
     <div style={{ height: 400, width: "100%" }}>
       <DataGrid
-        rows={rows}
+        rows={products}
         columns={columns}
         pagination
         pageSize={5}
@@ -45,10 +34,9 @@ export default function DataTable() {
   );
 }
 
-
 export async function getServerSideProps() {
-    const response = await axios.get('http://your-api-url-here/products');
-    const products = response.data;
-  
-    return { props: { products } };
-  }
+  const response = await axios.get("http://localhost:3000/api/product");
+  const products = response.data;
+
+  return { props: { products } };
+}

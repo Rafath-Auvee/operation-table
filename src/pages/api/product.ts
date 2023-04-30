@@ -17,11 +17,9 @@ const ProductSchema = new mongoose.Schema<Product>({
   rating: { type: Number, required: true },
 });
 
-const ProductModel = mongoose.model<Product>(
-  "Product",
-  ProductSchema,
-  "products"
-);
+const ProductModel =
+  mongoose.models.Product ||
+  mongoose.model<Product>("Product", ProductSchema, "products");
 
 const connectToDatabase = async () => {
   if (mongoose.connections[0].readyState) {
